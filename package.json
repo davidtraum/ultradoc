@@ -1,0 +1,14 @@
+{
+  "name": "doc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:all": "./build.sh",
+    "build": "deno compile --allow-read --output dist/run src/index.ts",
+    "run": "deno run src/index.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
