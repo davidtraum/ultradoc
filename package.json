@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:all": "./build.sh",
     "build": "deno compile --allow-read --output dist/run src/index.ts",
-    "run": "deno run src/index.ts"
+    "start": "deno run -A src/index.ts"
   },
   "author": "",
   "license": "ISC"

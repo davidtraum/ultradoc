@@ -1,58 +1,47 @@
 
-## Document Structure
+> Hint: Early state of development. A more detailed documentation will follow.
 
-## Elements
+## Functional document markup
+* Lists
+* Tables
+* Images
+* Layouts
+* Code Highlighting
+* Math
 
-### text
-* Aliases: text, t
+## Examples
 
-### image
-* Aliases: image, img
-
-### list
-* Aliases: list, l
-
-### item
-* Aliases: item, i
-
-### table
-* Aliases: table
-
-### row
-
-## Example
+Simple List:
 ````
-#text {headline,center} My Document
-#text {center} By Mister Test
-
 #list
-  #item My first list item
-  #item My second list item
+  #ítem Some
+  #item List
+  #item {red, bold} Important
     #list
-      #item And even subitems
-
-Here is some code:
-#code [lang=sql]
-  SELECT * FROM list WHERE a=2
-  DROP TABLE test
-
-A table:
-#table
-  #header
-    #cell My first column
-    #cell A second column
-  #row
-    #Some entries
-    #Even more
-  #row
-    #And a second row
-    #With contents
-
-A text with background image:
-#container
-  #background[image=myimage.png]
-  #text {large,center} Wow!
-
-  
-#text {small,center} Last modified: %%date, %%time
+      #item Sublist
 ````
+
+Syntax highlighting (using highlight.js)
+````
+#code [lang=sql]
+SELECT * FROM myTable WHERE a = 2
+DROP TABLE myTable
+````
+
+Table
+````
+#table {centered}
+  #header
+    #cell {bold} First Column
+    #cell Second column
+  #row
+    #cell Some data
+    #cell More data
+  #row
+    #cell
+      #list [ordered]
+        #item Nested list
+        #item Works fine
+    #cell Cell item
+````
+    

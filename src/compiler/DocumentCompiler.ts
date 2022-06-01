@@ -54,6 +54,9 @@ export class DocumentCompiler {
     public readonly bodyContent: Array<string | DocumentNode> = [];
     private stack: Array<DocumentNode> = [];
     public head: DocumentHead = new DocumentHead();
+    public stats = {
+        nodesProcessed: 0
+    };
 
     constructor() {
         for(const node of this.NODE_LIST) {
@@ -205,6 +208,7 @@ export class DocumentCompiler {
             if(el instanceof DocumentNode) {
                 el.postProcess(this);
                 this.bodyContent[this.bodyContent.indexOf(el)] = el.getOpenTag();
+                this.stats.nodesProcessed++;
             }
         }
         this.head.end();

@@ -3,7 +3,7 @@ import { DocumentCompiler } from "./compiler/DocumentCompiler.ts";
 import { renderPDF } from "./renderer/PDFRenderer.ts";
 
 interface CommandLineArguments {
-    file?: string;
+    in?: string;
     out?: string;
     pdf?: boolean;
 }
@@ -14,18 +14,22 @@ const compiler = new DocumentCompiler();
 
 function finish() {
     compiler.end();
+    console.log("Processed", compiler.stats.nodesProcessed, "nodes.");
     if(args.out) {
-        Deno.writeTextFile(args.out, compiler.getDocumentContent());
+        console.log("Writing", args.out);
+        Deno.writeTextFileSync(args.out, compiler.getDocumentContent());
         if(args.pdf) {
             renderPDF('index.html');
         }
     } else {
         console.log(compiler.getDocumentContent());
     }
+    console.log("Finished.");
 }
 
-if(args.file) {
-    Deno.readTextFile(args.file).then(text => {
+if(args.in) {
+    console.log("Compiling", args.in);
+    Deno.readTextFile(args.in).then(text => {
         for(const line of text.split("\n")) compiler.inputLine(line);
         finish();
     });
