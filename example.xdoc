@@ -1,12 +1,12 @@
 
-#background [color=cyan]
 #text {headline} Max Mustermann
 
+#t {large,center} Table of contents
 #contents {center} [page=Seite]
 #newpage
 
 #container
-  #t {large} Aufgabe 1
+  #t {large} [no-toc] Aufgabe 1
   #t {large} Aufgabe 2
   #t {large} Aufgabe 3
 
@@ -18,58 +18,3 @@
   #t {large} Aufgabe 2
   #t {large} Aufgabe 3
 
-
-#container
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-
-#container
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-
-#container
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-
-#container
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
-
-  #t {large} Aufgabe 1
-  #t {large} Aufgabe 2
-  #t {large} Aufgabe 3
