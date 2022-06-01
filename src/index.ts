@@ -25,6 +25,9 @@ function finish() {
         console.log(compiler.getDocumentContent());
     }
     console.log("Finished.");
+    for(const error of compiler.errors) {
+        console.log("Error:", error);
+    }
 }
 
 if(args.in) {

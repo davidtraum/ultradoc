@@ -1,16 +1,28 @@
 import PostRenderScript from "./lib/PostRenderScript.ts";
+import PageSizes, { PageSizeInfo } from "./PageSize.ts";
 import Styles from "./Styles.ts";
 
+interface HeadProperties {
+    title: string;
+    charset: string;
+    usesCode: boolean;
+    googleFontList: Array<string>;
+    globalFont: string;
+    pageSize: PageSizeInfo
+}
 export class DocumentHead {
 
     private readonly content = [
         '<head>'
     ]
 
-    properties: {[key: string]: boolean | string} = {
-        "title": "Document",
-        "charset": "utf-8",
-        "usesCode": false
+    properties: HeadProperties= {
+        title: "Document",
+        charset: "utf-8",
+        usesCode: false,
+        googleFontList: [],
+        globalFont: 'Verdana',
+        pageSize: PageSizes.A4
     }
 
     private scripts: Array<string> = [
@@ -28,10 +40,20 @@ export class DocumentHead {
         this.content.push(`<meta charset="${this.properties.charset}">`);
         this.content.push(`<style>${Styles.default}`);
         for(const style of this.styles) this.content.push(style);
+        this.content.push(`html {font-family: ${this.properties.globalFont}; max-width: ${this.properties.pageSize.width}mm;}`);
+        this.content.push(`.limit-page-size {max-width: ${this.properties.pageSize.width}mm; max-height: ${this.properties.pageSize.height}mm;}`);
+        for(const font of this.properties.googleFontList) {
+            this.content.push(`.${font} {font-family: ${font};}`);
+        }
         this.content.push('</style>')
         for(const script of this.scripts) {
             this.content.push(`<script>${script}</script>`);
         }
+        this.content.push('<script>');
+        this.content.push(`
+            window.udocPageSize = ${JSON.stringify(this.properties.pageSize)}
+        `);
+        this.content.push('</script>');
         for(const raw of this.raw) {
             this.content.push(raw);
         }
@@ -39,10 +61,12 @@ export class DocumentHead {
     }
 
     hasProperty(key: string): boolean {
+        //@ts-ignore
         return this.properties[key] !== undefined;
     }
 
     editProperty(key: string, value: string | boolean) {
+        //@ts-ignore
         if(this.hasProperty(key)) this.properties[key] = value;
     }
 

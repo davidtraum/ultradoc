@@ -1,19 +1,50 @@
-<html><head>
+<!DOCTYPE html><html><head>
 <title>Document</title>
 <meta charset="utf-8">
 <style>
-        @media print {.page-break { page-break-before: always; }}
-        html {
-            font-family: Verdana;
+        @media print {
+            .page-box {
+                border-bottom: none !important;
+            }
         }
-        .small {
+        @media screen {
+            html {
+                border-right: 1px dashed black;
+            }
+        }
+        .page-box {
+            position: absolute;
+            z-index: -2;
+            left: 0;
+            border-bottom: 1px solid black;
+            width: 100%;
+        }
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-number {
+            font-size: 1.5rem;
+            border-radius: 50%;
+        }
+        p.xs {
+            font-size: 0.5rem;
+        }
+        p.s {
             font-size: 0.8rem;
         }
-        .large {
+        p.l {
             font-size: 1.5rem;
         }
-        .headline {
+        p.xl {
             font-size: 2rem;
+        }
+        p.xxl {
+            font-size: 3rem;
         }
         .bold {
             font-weight: bold;
@@ -29,9 +60,6 @@
         }
         p.center {
             text-align: center;
-        }
-        p {
-            padding: .2rem;
         }
         .hljs-ln-numbers {
             -webkit-touch-callout: none;
@@ -82,13 +110,16 @@
         .horizontal {
             display: flex;
         }
-        .horizontal.expand {
+        .horizontal.expand-evenly {
             justify-content: space-evenly;
+        }
+        .horizontal.expand-max {
+            justify-content: space-between;
         }
         .right {
             text-align: right;
         }
-        .horizontal .spacer {
+        .horizontal > .spacer {
             height: 0 !important;
         }
         * {
@@ -107,24 +138,74 @@
         }
         body {
             margin: 0;
-            width: 210mm;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            opacity: 0;
+        }
+        html {
+            overflow-x: hidden;
+        }
+        body > * {
+            padding-right: 1rem;
+            padding-left: 1rem;
         }
         .content-link {
             display: none;
         }
         .toc-entry {
             border-bottom: 1px dotted gray;
+            display: flex;
+            justify-content: space-between;
+        }
+        .toc-entry.l {
+            padding-left: 2rem;
+        }
+        .toc-entry.xl {
+            padding-left: 1rem;
+        }
+        .toc-link {
+            text-decoration: none;
+            color: unset;
+        }
+        .line {
+            height: 1px;
+            width: 100%;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+            background-color: gray;
+        }
+        .horizontal .line {
+            height: 100%;
+            width: 1px;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: .5rem;
+            margin-left: .5rem;
+        }
+        .border {
+            border: 1px dashed gray;
+            padding: 1rem;
         }
     
+html {font-family: Roboto; max-width: 297mm;}
+.limit-page-size {max-width: 297mm; max-height: 420mm;}
+.Pacifico {font-family: Pacifico;}
+.Roboto {font-family: Roboto;}
 </style>
 <script>
+window.addEventListener('load', postRender);
 function postRender() {
     const measureDiv = document.createElement('div');
     document.body.appendChild(measureDiv);
-    measureDiv.style.height = '297mm';
+    measureDiv.style.height = window.udocPageSize.height + 'mm';
     const measureBounds = measureDiv.getBoundingClientRect();
     const pageHeight = measureBounds.height;
-    console.log("Page height", pageHeight)
+    const pageBreaks = document.querySelectorAll('.page-break');
+    for(const pageBreak of pageBreaks) {
+        const bounds = pageBreak.getBoundingClientRect();
+        const remaining = pageHeight - (bounds.top % pageHeight);
+        pageBreak.style.height = remaining + 'px';
+    }
     const elements = document.querySelectorAll('body > *');
     let pageIndex = 0;
     for(const el of elements) {
@@ -134,42 +215,68 @@ function postRender() {
             pageIndex++;
         }
     }
+    for(const el of document.querySelectorAll('.toc-page')) {
+        const target = document.getElementById(el.dataset.target);
+        const targetBounds = target.getBoundingClientRect();
+        const targetPage = (((targetBounds.top) / pageHeight) + 1) | 0;
+        el.innerHTML = targetPage;
+    }
+    for(let i = 0; i<pageIndex; i++) {
+        const pageDiv = document.createElement('div');
+        pageDiv.classList.add('page-box');
+        pageDiv.style.top = (i*pageHeight) + 'px';
+        pageDiv.style.height = pageHeight + 'px';
+        const pageFooter = document.createElement('div');
+        pageFooter.classList.add('page-footer');
+        const pageNumber = document.createElement('div');
+        pageNumber.classList.add('page-number');
+        pageFooter.appendChild(pageNumber);
+        pageNumber.innerHTML = i + 1;
+        pageDiv.appendChild(pageFooter);
+        document.body.appendChild(pageDiv);
+    }
+    document.body.style.height = (pageHeight * (pageIndex + 1)) + 'px';
+    console.log("UltraDoc: Post render processing finished. Pages: ", pageIndex + 1);
+    document.body.style.opacity = 1;
 }
 </script>
-</head><body><p class="headline">
+<script>
+
+            window.udocPageSize = {"width":297,"height":420,"label":"A3"}
+        
+</script>
+
+                                <link rel="preconnect" href="https://fonts.googleapis.com">
+                                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                            
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head><body><div class=" background limit-page-size" image="https://stadtlandfluss.cool/img/back1.c9713ccb.jpg" style="background-image: url(https://stadtlandfluss.cool/img/back1.c9713ccb.jpg)">
+</div>
+<div class="expand-max horizontal">
+<div class=" horizontal">
+<div >
+<div class="spacer" style="height: 1em; width: 1em"></div>
+<img src="https://stadtlandfluss.cool/img/river.9f8555aa.png" width="150" height="150">
+</div>
+<div class="spacer" style="height: 1em; width: 1em"></div>
+<p class="xxl  Pacifico" id="Max Mustermann1">
 Max Mustermann
 </p>
-<p class="large center">
-Table of contents
-</p>
-<div class="center" page="Seite"><div class="toc-entry">Aufgabe 2</div><div class="toc-entry">Aufgabe 3</div><div class="toc-entry">Aufgabe 1</div><div class="toc-entry">Aufgabe 2</div><div class="toc-entry">Aufgabe 3</div><div class="toc-entry">Aufgabe 1</div><div class="toc-entry">Aufgabe 2</div><div class="toc-entry">Aufgabe 3</div>
-<div class="page-break"></div>
+</div>
 <div >
-<p class="large" no-toc>
-Aufgabe 1
+<div class="spacer" style="height: 1em; width: 1em"></div>
+<div class=" border" width="20" style="border-width: 20px;">
+<p class="bold" id="Hauptstraße 942">
+Hauptstraße 94
 </p>
-<p class="large">
-Aufgabe 2
+<p  id="29320 Musterstadt3">
+29320 Musterstadt
 </p>
-<p class="large">
-Aufgabe 3
+<p  id="Deutschland4">
+Deutschland
 </p>
-<p class="large">
-Aufgabe 1
-</p>
-<p class="large">
-Aufgabe 2
-</p>
-<p class="large">
-Aufgabe 3
-</p>
-<p class="large">
-Aufgabe 1
-</p>
-<p class="large">
-Aufgabe 2
-</p>
-<p class="large">
-Aufgabe 3
-</p>
-</div></body></html>
+</div>
+</div>
+</div>
+<div class="line"></div></body></html>

@@ -1,12 +1,15 @@
 import { DocumentNode } from "./DocumentNode.ts";
 import { DocumentHead } from "./head/DocumentHead.ts";
+import PageSizes from "./head/PageSize.ts";
 import { BackgroundNode } from "./nodes/BackgroundNode.ts";
+import { BorderNode } from "./nodes/BorderNode.ts";
 import { CodeNode } from "./nodes/CodeNode.ts";
 import { ContainerNode } from "./nodes/ContainerNode.ts";
 import { ContentNode } from "./nodes/ContentNode.ts";
 import { ContentsNode } from "./nodes/ContentsNode.ts";
 import { HorizontalNode } from "./nodes/HorizontalNode.ts";
 import { ImageNode } from "./nodes/ImageNode.ts";
+import { LineNode } from "./nodes/LineNode.ts";
 import { ListItemNode } from "./nodes/ListItemNode.ts";
 import { ListNode } from "./nodes/ListNode.ts";
 import { PageBreakNode } from "./nodes/PageBreakNode.ts";
@@ -16,6 +19,7 @@ import { TableHeaderNode } from "./nodes/TableHeader.ts";
 import { TableNode } from "./nodes/TableNode.ts";
 import { TableRowNode } from "./nodes/TableRowNode.ts";
 import { TextNode } from "./nodes/TextNode.ts";
+import { TransformNode } from "./nodes/TransformNode.ts";
 
 export interface NodeArguments {
     type: string;
@@ -44,9 +48,12 @@ export class DocumentCompiler {
         SpacerNode,
         BackgroundNode,
         ContentsNode,
-        ContentNode
+        ContentNode,
+        TransformNode,
+        LineNode,
+        BorderNode
     ]
-    private readonly errors: Array<string> = [];
+    public readonly errors: Array<string> = [];
     private lineCount = 0;
     private indent = 0;
     private defaultIndent = 0;
@@ -154,6 +161,36 @@ export class DocumentCompiler {
                     this.inputLine(line);
                 }
                 break;
+            case "font":
+                switch(args[1]) {
+                    case "require":
+                        if(this.head.properties.googleFontList.length <= 0) {
+                            this.head.addRaw(`
+                                <link rel="preconnect" href="https://fonts.googleapis.com">
+                                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                            `);
+                        }
+                        if(!this.head.properties.googleFontList.includes(args[2])) {
+                            this.head.properties.googleFontList.push(args[2]);
+                            this.head.addRaw(`<link href="https://fonts.googleapis.com/css2?family=${args[2]}&display=swap" rel="stylesheet">`)
+                        }
+                        break;
+                    case "default":
+                        this.head.properties.globalFont = args[2];
+                        break;
+                }
+                break;
+            case "page":
+                switch(args[1]) {
+                    case "size":
+                        if(PageSizes[args[2]] !== undefined) {
+                            this.head.properties.pageSize = PageSizes[args[2]];
+                        }  else {
+                            this.error('Invalid page format: ' + args[2]);
+                        }
+                        break;
+                }
+                break;
             default:
                 this.error(`Unknown action command: ${cmd}`);
                 break;
@@ -205,6 +242,13 @@ export class DocumentCompiler {
             }
         }
         for(const el of this.bodyContent) {
+            if(el instanceof ContentsNode) {
+                el.postProcess(this);
+                this.bodyContent[this.bodyContent.indexOf(el)] = el.getOpenTag();
+                this.stats.nodesProcessed++;
+            }           
+        }
+        for(const el of this.bodyContent) {
             if(el instanceof DocumentNode) {
                 el.postProcess(this);
                 this.bodyContent[this.bodyContent.indexOf(el)] = el.getOpenTag();
@@ -227,6 +271,6 @@ export class DocumentCompiler {
     }
 
     getDocumentContent(): string {
-        return `<html>${this.head.getHead()}<body>${this.getBodyContent()}</body></html>`;
+        return `<!DOCTYPE html><html>${this.head.getHead()}<body>${this.getBodyContent()}</body></html>`;
     }
 }

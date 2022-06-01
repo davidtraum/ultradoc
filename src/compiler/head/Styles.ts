@@ -1,18 +1,49 @@
 
 const Styles = {
     default: `
-        @media print {.page-break { page-break-before: always; }}
-        html {
-            font-family: Verdana;
+        @media print {
+            .page-box {
+                border-bottom: none !important;
+            }
         }
-        .small {
+        @media screen {
+            html {
+                border-right: 1px dashed black;
+            }
+        }
+        .page-box {
+            position: absolute;
+            z-index: -2;
+            left: 0;
+            border-bottom: 1px solid black;
+            width: 100%;
+        }
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-number {
+            font-size: 1.5rem;
+            border-radius: 50%;
+        }
+        p.xs {
+            font-size: 0.5rem;
+        }
+        p.s {
             font-size: 0.8rem;
         }
-        .large {
+        p.l {
             font-size: 1.5rem;
         }
-        .headline {
+        p.xl {
             font-size: 2rem;
+        }
+        p.xxl {
+            font-size: 3rem;
         }
         .bold {
             font-weight: bold;
@@ -28,9 +59,6 @@ const Styles = {
         }
         p.center {
             text-align: center;
-        }
-        p {
-            padding: .2rem;
         }
         .hljs-ln-numbers {
             -webkit-touch-callout: none;
@@ -81,13 +109,16 @@ const Styles = {
         .horizontal {
             display: flex;
         }
-        .horizontal.expand {
+        .horizontal.expand-evenly {
             justify-content: space-evenly;
+        }
+        .horizontal.expand-max {
+            justify-content: space-between;
         }
         .right {
             text-align: right;
         }
-        .horizontal .spacer {
+        .horizontal > .spacer {
             height: 0 !important;
         }
         * {
@@ -106,13 +137,53 @@ const Styles = {
         }
         body {
             margin: 0;
-            width: 210mm;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            opacity: 0;
+        }
+        html {
+            overflow-x: hidden;
+        }
+        body > * {
+            padding-right: 1rem;
+            padding-left: 1rem;
         }
         .content-link {
             display: none;
         }
         .toc-entry {
             border-bottom: 1px dotted gray;
+            display: flex;
+            justify-content: space-between;
+        }
+        .toc-entry.l {
+            padding-left: 2rem;
+        }
+        .toc-entry.xl {
+            padding-left: 1rem;
+        }
+        .toc-link {
+            text-decoration: none;
+            color: unset;
+        }
+        .line {
+            height: 1px;
+            width: 100%;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+            background-color: gray;
+        }
+        .horizontal .line {
+            height: 100%;
+            width: 1px;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: .5rem;
+            margin-left: .5rem;
+        }
+        .border {
+            border: 1px dashed gray;
+            padding: 1rem;
         }
     `
 }

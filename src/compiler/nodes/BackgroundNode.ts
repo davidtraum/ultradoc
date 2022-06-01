@@ -6,7 +6,7 @@ export class BackgroundNode extends DocumentNode {
 
     constructor(args: NodeArguments) {
         super(args);
-        args.classes += ' background';
+        args.classes += ' background limit-page-size';
     }
 
     static getAliases(): Array<string> {

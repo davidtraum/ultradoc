@@ -3,8 +3,14 @@ import { DocumentNode } from "../DocumentNode.ts";
 
 export class TextNode extends DocumentNode {
 
+    private static idCount = 0;
+    public id?: string;
+
     constructor(args: NodeArguments) {
         super(args);
+        if(this.args.content) {
+            this.id = this.args.content + (++TextNode.idCount);
+        }
     }
 
     static getAliases(): Array<string> {
@@ -12,7 +18,11 @@ export class TextNode extends DocumentNode {
     }
 
     getOpenTag(): string {
-        return `<p ${this.getDefaultTagAttributes()}>`;
+        if(this.id) {
+            return `<p ${this.getDefaultTagAttributes()} id="${this.id}">`;
+        } else {
+            return `<p ${this.getDefaultTagAttributes()}>`;
+        }
     }
 
     isVoid(): boolean {

@@ -1,0 +1,21 @@
+@font require Pacifico
+@font require Roboto
+@font default Roboto
+@page size A3
+
+#background [image=https://stadtlandfluss.cool/img/back1.c9713ccb.jpg]
+
+#horizontal {expand-max}
+  #horizontal
+    #container
+      #space
+      #image [src=https://stadtlandfluss.cool/img/river.9f8555aa.png,width=150,height=150]
+    #space
+    #text {xxl, Pacifico} Max Mustermann
+  #container
+    #space
+    #border [width=20]
+      #text {bold} Hauptstraße 94
+      #text 29320 Musterstadt
+      #text Deutschland
+#line

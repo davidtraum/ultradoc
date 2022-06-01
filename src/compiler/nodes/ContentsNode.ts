@@ -31,8 +31,11 @@ export class ContentsNode extends DocumentNode {
         this.toc = '';
         for(const entry of compiler.bodyContent) {
             if(entry instanceof TextNode) {
-                if(entry.args.classes.includes('headline') || entry.args.classes.includes('large') && !entry.args.attributes['no-toc'] && entry.args.content.length > 0) {
-                    this.toc += `<div class="toc-entry">${entry.args.content}</div>`;
+                if((entry.args.classes.includes('l') || entry.args.classes.includes('xl') || entry.args.classes.includes('xxl')) && entry.args.attributes['no-toc'] === undefined && entry.args.content.length > 0) {
+                    this.toc += `<a href="#${entry.id}" class="toc-link"><div class="toc-entry ${entry.args.classes}">
+                                    <div class="toc-title">${entry.args.content}</div>
+                                    <div class="toc-page" data-target="${entry.id}"></div>    
+                                </div></a>`;
                 }
             }
         }
