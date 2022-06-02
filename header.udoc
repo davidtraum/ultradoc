@@ -1,0 +1,10 @@
+@component begin personalHeader
+#layout {horizontal}
+  #text {xxl} %%name
+  #space [auto]
+  #layout
+    #container
+      #text {bold} %%street
+      #text %%city
+      #text %%country
+@component end 

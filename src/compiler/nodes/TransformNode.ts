@@ -20,10 +20,10 @@ export class TransformNode extends DocumentNode {
             styles.push(`scale(${this.args.attributes.scale})`);
         }
         if(this.args.attributes.moveX) {
-            styles.push(`translateX(${this.args.attributes.moveX}em)`);
+            styles.push(`translateX(${this.args.attributes.moveX}px)`);
         }
         if(this.args.attributes.moveY) {
-            styles.push(`translateY(${this.args.attributes.moveY}em)`);
+            styles.push(`translateY(${this.args.attributes.moveY}px)`);
         }
         return styles.join(" ");
     }

@@ -1,3 +1,4 @@
+import Graphics from "./Graphics.ts";
 import PostRenderScript from "./lib/PostRenderScript.ts";
 import PageSizes, { PageSizeInfo } from "./PageSize.ts";
 import Styles from "./Styles.ts";
@@ -8,7 +9,9 @@ interface HeadProperties {
     usesCode: boolean;
     googleFontList: Array<string>;
     globalFont: string;
-    pageSize: PageSizeInfo
+    pageSize: PageSizeInfo;
+    pageNumbers: boolean;
+    excludePageNumbers: Array<number>;
 }
 export class DocumentHead {
 
@@ -22,7 +25,9 @@ export class DocumentHead {
         usesCode: false,
         googleFontList: [],
         globalFont: 'Verdana',
-        pageSize: PageSizes.A4
+        pageSize: PageSizes.A4,
+        pageNumbers: true,
+        excludePageNumbers: []
     }
 
     private scripts: Array<string> = [
@@ -45,13 +50,18 @@ export class DocumentHead {
         for(const font of this.properties.googleFontList) {
             this.content.push(`.${font} {font-family: ${font};}`);
         }
+        this.content.push(Graphics);
         this.content.push('</style>')
         for(const script of this.scripts) {
             this.content.push(`<script>${script}</script>`);
         }
         this.content.push('<script>');
         this.content.push(`
-            window.udocPageSize = ${JSON.stringify(this.properties.pageSize)}
+            window.udoc = {
+                pageSize: ${JSON.stringify(this.properties.pageSize)},
+                pageNumbers: ${this.properties.pageNumbers},
+                excludePageNumbers: ${JSON.stringify(this.properties.excludePageNumbers)}
+            }
         `);
         this.content.push('</script>');
         for(const raw of this.raw) {

@@ -7,8 +7,10 @@ import { CodeNode } from "./nodes/CodeNode.ts";
 import { ContainerNode } from "./nodes/ContainerNode.ts";
 import { ContentNode } from "./nodes/ContentNode.ts";
 import { ContentsNode } from "./nodes/ContentsNode.ts";
-import { HorizontalNode } from "./nodes/HorizontalNode.ts";
+import { ErrorsNode } from "./nodes/ErrorsNode.ts";
+import { FooterNode } from "./nodes/FooterNode.ts";
 import { ImageNode } from "./nodes/ImageNode.ts";
+import { LayoutNode } from "./nodes/LayoutNode.ts";
 import { LineNode } from "./nodes/LineNode.ts";
 import { ListItemNode } from "./nodes/ListItemNode.ts";
 import { ListNode } from "./nodes/ListNode.ts";
@@ -26,6 +28,7 @@ export interface NodeArguments {
     classes: string;
     attributes: {[key: string]: string};
     content: string;
+    processedContent: string;
 }
 
 
@@ -44,14 +47,16 @@ export class DocumentCompiler {
         TableHeaderNode,
         ContainerNode,
         ImageNode,
-        HorizontalNode,
         SpacerNode,
         BackgroundNode,
         ContentsNode,
         ContentNode,
         TransformNode,
         LineNode,
-        BorderNode
+        BorderNode,
+        LayoutNode,
+        ErrorsNode,
+        FooterNode
     ]
     public readonly errors: Array<string> = [];
     private lineCount = 0;
@@ -61,6 +66,9 @@ export class DocumentCompiler {
     public readonly bodyContent: Array<string | DocumentNode> = [];
     private stack: Array<DocumentNode> = [];
     public head: DocumentHead = new DocumentHead();
+    private readonly components: {[key: string]: string[]} = {};
+    private iconService = 'ionic';
+    private currentReadComponent?: string;
     public stats = {
         nodesProcessed: 0
     };
@@ -123,7 +131,8 @@ export class DocumentCompiler {
             type,
             attributes,
             classes,
-            content
+            content,
+            processedContent: this.replaceIcons(content)
         };
     }
 
@@ -157,26 +166,33 @@ export class DocumentCompiler {
                 for(const line of text.split("\n")) {
                     current++;
                     if(current < skip) continue;
-                    if(current >= end) break;
+                    if(current >= end && end > 0) break;
                     this.inputLine(line);
                 }
                 break;
             case "font":
                 switch(args[1]) {
                     case "require":
-                        if(this.head.properties.googleFontList.length <= 0) {
-                            this.head.addRaw(`
-                                <link rel="preconnect" href="https://fonts.googleapis.com">
-                                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                            `);
-                        }
-                        if(!this.head.properties.googleFontList.includes(args[2])) {
-                            this.head.properties.googleFontList.push(args[2]);
-                            this.head.addRaw(`<link href="https://fonts.googleapis.com/css2?family=${args[2]}&display=swap" rel="stylesheet">`)
+                        {
+                            if(this.head.properties.googleFontList.length <= 0) {
+                                this.head.addRaw(`
+                                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                                `);
+                            }
+                            const fontname = args.slice(2).join(" ");
+                            if(!this.head.properties.googleFontList.includes(fontname)) {
+                                this.head.properties.googleFontList.push(fontname);
+                                this.head.addRaw(`<link href="https://fonts.googleapis.com/css2?family=${fontname}&display=swap" rel="stylesheet">`)
+                            }
+                            this.head.properties.globalFont = fontname;
                         }
                         break;
                     case "default":
-                        this.head.properties.globalFont = args[2];
+                        {
+                            const fontname = args.slice(2).join(" ");
+                            this.head.properties.globalFont = args[2];
+                        }
                         break;
                 }
                 break;
@@ -189,6 +205,41 @@ export class DocumentCompiler {
                             this.error('Invalid page format: ' + args[2]);
                         }
                         break;
+                    case "numbers":
+                        switch(args[2]) {
+                            case "off":
+                                this.head.properties.pageNumbers = false;
+                                break;
+                            case "exclude":
+                                args[3].split(",").map(el => parseInt(el.trim())).forEach(el => this.head.properties.excludePageNumbers.push(el));
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case "document":
+                switch(args[1]) {
+                    case "title":
+                        this.head.properties.title = args.slice(2).join(" ");
+                        break;
+                }
+                break;
+            case "component":
+                switch(args[1]) {
+                    case "begin":
+                        this.components[args[2]] = [];
+                        this.currentReadComponent = args[2];
+                        break;
+                    case "end":
+                        this.currentReadComponent = undefined;
+                        break;
+                }
+                break;
+            case "icon":
+                switch(args[1]) {
+                    case "service":
+                        this.iconService = args[2];
+                        break; 
                 }
                 break;
             default:
@@ -197,10 +248,45 @@ export class DocumentCompiler {
         }
     }
 
+    getIconTag(name: string, service: string): string {
+        switch(service) {
+            case 'ion':
+            case 'ionic':
+            case 'ionicons':
+                return `<img class="icon" src="https://unpkg.com/ionicons@5.5.2/dist/svg/${name}.svg">`;
+            case 'fa':
+            case 'fontawesome':
+                return `<img class="icon" src="	https://site-assets.fontawesome.com/releases/v6.1.1/svgs/solid/${name}.svg">`;
+            default:
+                this.error('Invalid icon service');
+                return '';
+        }
+    }
+
+    replaceIcons(text: string): string {
+        while(text.includes('**') && text.indexOf('**') !== text.lastIndexOf('**')) {
+            let subtext = text.substring(text.indexOf('**') + 2);
+            const iconNameText = subtext.substring(0, subtext.indexOf('**'));
+            let iconName = iconNameText;
+            let service = this.iconService;
+            if(iconName.includes(':')) {
+                const split = iconName.split(':').map(el=>el.trim());
+                service = split[0];
+                iconName = split[1];
+            }
+            text = text.replace(`**${iconNameText}**`, this.getIconTag(iconName, service));
+        }
+        return text;
+    }
+
     inputLine(line: string) {
         this.lineCount++;
         let trimmed = line.trim();
         if(trimmed.length > 0) {
+            if(trimmed[0] !== '@' && this.currentReadComponent) {
+                this.components[this.currentReadComponent].push(line);
+                return;
+            }
             if(trimmed[0] === '#') {
                 const lineIndent = line.length - line.trimStart().length;
                 if(lineIndent > 0 && this.defaultIndent <= 0) {
@@ -220,8 +306,15 @@ export class DocumentCompiler {
                         }
                     }
                     this.bodyContent.push(node);
-                    if(args.content.length > 0) this.bodyContent.push(args.content);
+                    if(args.processedContent.length > 0) this.bodyContent.push(args.processedContent);
                     this.stack.push(node);
+                } else if(this.components[args.type]){
+                    for(let line of this.components[args.type]) {
+                        for(const attr of Object.keys(args.attributes)) {
+                            while(line.includes(`%%${attr}`)) line = line.replace(`%%${attr}`, args.attributes[attr]);
+                        }
+                        this.inputLine(' '.repeat(this.currentIndent) + line);
+                    }
                 } else {
                     this.error('Unknown element: "' + args.type + '"');
                 }
@@ -229,7 +322,7 @@ export class DocumentCompiler {
             } else if(trimmed[0] === '@') {
                 this.processCommand(trimmed.substring(1));
             } else {
-                this.bodyContent.push(line);
+                this.bodyContent.push(this.replaceIcons(line));
             }
         }
     }
@@ -262,6 +355,7 @@ export class DocumentCompiler {
         while(text.includes('%%time')) text = text.replace('%%time', new Date().toLocaleTimeString());
         while(text.includes('%%date')) text = text.replace('%%date', new Date().toLocaleDateString());
         while(text.includes('%%os')) text = text.replace('%%os', Deno.build.os);
+        while(text.includes('%%title')) text = text.replace('%%title', this.head.properties.title);
         return text;
     }
 

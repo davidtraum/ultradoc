@@ -1,15 +1,15 @@
 import { NodeArguments, DocumentCompiler } from "../DocumentCompiler.ts";
 import { DocumentNode } from "../DocumentNode.ts";
 
-export class HorizontalNode extends DocumentNode {
+export class LayoutNode extends DocumentNode {
 
     constructor(args: NodeArguments) {
         super(args);
-        args.classes += ' horizontal';
+        args.classes += ' layout';
     }
 
     static getAliases(): Array<string> {
-        return ['horizontal'];
+        return ['layout'];
     }
 
     getOpenTag(): string {

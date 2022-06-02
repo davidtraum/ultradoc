@@ -5,7 +5,7 @@ export class SpacerNode extends DocumentNode {
 
     constructor(args: NodeArguments) {
         super(args);
-        if(args.attributes['size'] === undefined) args.attributes['size'] = '1';
+        if(args.attributes['auto'] === undefined && args.attributes['size'] === undefined) args.attributes['size'] = '1';
     }
 
     static getAliases(): Array<string> {
@@ -13,7 +13,11 @@ export class SpacerNode extends DocumentNode {
     }
 
     getOpenTag(): string {
-        return `<div class="spacer" style="height: ${this.args.attributes.size}em; width: ${this.args.attributes.size}em"></div>`;
+        if(this.args.attributes.auto) {
+            return `<div class="spacer" style="flex-grow: 1;"></div>`;
+        } else {
+            return `<div class="spacer" style="height: ${this.args.attributes.size}px; width: ${this.args.attributes.size}px"></div>`;
+        }
     }
 
     isVoid(): boolean {
