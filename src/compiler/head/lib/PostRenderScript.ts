@@ -5,32 +5,47 @@ async function waitTimeout(timeout) {
 }
 
 async function postRender() {
+    console.log("UltraDoc: Starting rendering...");
     const before = Date.now();
     const measureDiv = document.createElement('div');
     document.body.appendChild(measureDiv);
     measureDiv.style.height = window.udoc.pageSize.height + 'mm';
     const measureBounds = measureDiv.getBoundingClientRect();
     const pageHeight = measureBounds.height;
-    const elements = document.querySelectorAll('body > *');
+    document.body.removeChild(measureDiv);
     let pageIndex = 0;
     const addTasks = [];
     let pageBreaks = document.querySelectorAll('.page-break');
+    let count = 0;
     for(const pageBreak of pageBreaks) {
         pageBreak.classList.remove('page-break');
+        pageBreak.classList.add('manual-break');
         const bounds = pageBreak.getBoundingClientRect();
         const remaining = pageHeight - (bounds.top % pageHeight);
         pageBreak.style.height = remaining + 'px';
+        count++;
     }
+    const elements = document.querySelectorAll('body > *');
     for(const el of elements) {
-        const bounds = el.getBoundingClientRect();
-        if((bounds.top + bounds.height) - (pageIndex * pageHeight) > pageHeight) {
-            el.dataset.top = bounds.top;
-            const breaker = document.createElement('div');
-            addTasks.push(() => {document.body.insertBefore(breaker, el)});
-            breaker.classList.add('page-break');
+        if(el.classList.contains('.manual-break')) {
             pageIndex++;
+            continue;
+        }
+        const styles = getComputedStyle(el);
+        if(styles.getPropertyValue('position') !== 'fixed' && styles.getPropertyValue('position') !== 'absolute') {
+            const bounds = el.getBoundingClientRect();
+            console.log("Compare", (bounds.top + bounds.height), "-", (pageIndex * pageHeight), ">", pageHeight);
+            if((bounds.top + bounds.height) - (pageIndex * pageHeight) > pageHeight) {
+                console.log("Automatic page break at:", el);
+                const breaker = document.createElement('div');
+                breaker.dataset.debug="autobreak";
+                addTasks.push(() => {document.body.insertBefore(breaker, el)});
+                breaker.classList.add('page-break');
+                pageIndex++;
+            }
         }
     }
+    console.log("Automatic page breaks inserted:", pageIndex);
     pageBreaks = document.querySelectorAll('.page-break');
     for(const pageBreak of pageBreaks) {
         const bounds = pageBreak.getBoundingClientRect();
@@ -66,9 +81,18 @@ async function postRender() {
     }
     for(const footerContent of document.querySelectorAll('.footer-content')) {
         if(footerContent.dataset.always) {
+            let except = [];
+            if(footerContent.dataset.except) {
+                except = footerContent.dataset.except.split(",").map(el => parseInt(el.trim()));
+            }
+            let pageId = 1;
             document.querySelectorAll('.page-footer').forEach(footer => {
-                footer.firstChild.appendChild(footerContent);
+                if(!except.includes(pageId)) {
+                    footer.firstChild.appendChild(footerContent.cloneNode(true));
+                }
+                pageId++;
             });
+            footerContent.parentNode.removeChild(footerContent);
         } else {
             const bounds = footerContent.getBoundingClientRect();
             const page = (bounds.top / pageHeight) | 0;

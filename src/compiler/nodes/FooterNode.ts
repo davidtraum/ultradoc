@@ -16,7 +16,11 @@ export class FooterNode extends DocumentNode {
 
     getOpenTag(): string {
         if(this.args.attributes.always) {
-            return `<div ${this.getDefaultTagAttributes()} data-always="true">`;
+            if(this.args.attributes.except) {
+                return `<div ${this.getDefaultTagAttributes()} data-always="true" data-except="${this.args.attributes.except}">`;
+            } else {
+                return `<div ${this.getDefaultTagAttributes()} data-always="true">`;
+            }
         } else {
             return `<div ${this.getDefaultTagAttributes()}>`;
         }

@@ -1,6 +1,12 @@
-@document title Essay
+@document title Demo
 @font require Montserrat
 
-#footer [always]
-  #text {xs} %%title, last modified: %%date
+#t {xxl} [no-toc] Hallo
 
+#newpage
+
+#toc
+
+#newpage
+
+#t {xl} Kapitel 1

@@ -47,6 +47,9 @@ const Styles = {
             clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
             display: flex;
             justify-content: center;
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
         .page-number p {
             margin-top: auto;
