@@ -1,8 +1,51 @@
-@document title My document
+@document title Klausur CPS
 @font require Montserrat
 
-#space [size=500]
-#container {center}
-  #t {xxl} My document
+#space [size=16]
+#layout {horizontal}
+  #t {xxl, center} [no-toc] Klausur CPS
+  #space [auto]
+  #border {center}
+    #t {bold} [no-toc] David Traum (ITM2)
+    #t 10.06.2022
+    #t Herr Greve
+
+#line
+#space [size=50]
+
+#t {xl} [no-toc] **book** Inhalt
+#toc
+
+#space [size=50]
+
+
+#t {xl} Aufgabe 1
+#t {l} Teil a)
+#code [lang=c,src=sketch_a.c]
+
+#newpage
+
+#t {l} Teil b)
+#img [src=schaltplan.png]
+
+#newpage
+
+#t {xl} Aufgabe 2
+#t {l} Teil a)
+#uml [src=states.uml] {center}
+
+#newpage
+
+#t {l} Teil b)
+#uml [src=tree.uml] {center}
+
+#t {l} Teil c)
+#layout {horizontal}
+  #space
+  #list
+    #i a,b,c,d,e
+    #i a,b,c,document
+    #i a,d,e,f
+    #i a,f,d,e
 
 #footer %%branding

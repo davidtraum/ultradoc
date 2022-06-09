@@ -193,8 +193,8 @@ const Styles = {
         .line {
             height: 1px;
             width: 100%;
-            margin-top: .5rem;
-            margin-bottom: .5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
             background-color: gray;
         }
         .border {

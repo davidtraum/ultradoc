@@ -1,7 +1,14 @@
-@startuml
-[*] --> Initializing
-Initializing --> Not_Connected
-Not_Connected --> Connected
-Connected --> Not_Connected
-Connected --> Authentificating_User
-@enduml
+@startwbs
++ Initialisieren
+++ Kick off
+++ Insert
++++ Remove
++++ Login
+++++ Login Fail
+++++ Remove
+++++ Login OK
++++++ Remove
++++++ SD Auth OK
+++++++ Remove
+++++++ Logout
+@endwbs

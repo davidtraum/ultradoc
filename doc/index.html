@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>My document</title>
+<title>Klausur CPS</title>
 <meta charset="utf-8">
 <style>
         @media print {
@@ -194,8 +194,8 @@
         .line {
             height: 1px;
             width: 100%;
-            margin-top: .5rem;
-            margin-bottom: .5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
             background-color: gray;
         }
         .border {
@@ -383,7 +383,7 @@ async function postRender() {
                 pageSize: {"width":210,"height":297,"label":"A4"},
                 pageNumbers: true,
                 excludePageNumbers: [],
-                usesCode: false
+                usesCode: true
             }
         
 </script>
@@ -392,11 +392,116 @@ async function postRender() {
                                     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                                 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-</head><body><div class="spacer" style="height: 500px; width: 500px"></div>
-<div class="center">
-<p class="xxl" id="t1">
-My document
+
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/styles/default.min.css">
+                <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+            
+</head><body><div class="spacer" style="height: 16px; width: 16px"></div>
+<div class="horizontal layout">
+<p class="xxl  center" no-toc id="t1">
+Klausur CPS
 </p>
+<div class="spacer" style="flex-grow: 1;"></div>
+<div class="center border" style="">
+<p class="bold" no-toc id="t2">
+David Traum (ITM2)
+</p>
+<p  id="t3">
+10.06.2022
+</p>
+<p  id="t4">
+Herr Greve
+</p>
+</div>
+</div>
+<div class="line"></div>
+<div class="spacer" style="height: 50px; width: 50px"></div>
+<p class="xl" no-toc id="t5">
+<img class="icon" src="https://unpkg.com/ionicons@5.5.2/dist/svg/book.svg"> Inhalt
+</p>
+<div ><a href="#t6" class="toc-link"><div class="toc-entry xl">
+                                    <div class="toc-title">Aufgabe 1</div>
+                                    <div class="toc-page" data-target="t6"></div>    
+                                </div></a><a href="#t7" class="toc-link"><div class="toc-entry l">
+                                    <div class="toc-title">Teil a)</div>
+                                    <div class="toc-page" data-target="t7"></div>    
+                                </div></a><a href="#t8" class="toc-link"><div class="toc-entry l">
+                                    <div class="toc-title">Teil b)</div>
+                                    <div class="toc-page" data-target="t8"></div>    
+                                </div></a><a href="#t9" class="toc-link"><div class="toc-entry xl">
+                                    <div class="toc-title">Aufgabe 2</div>
+                                    <div class="toc-page" data-target="t9"></div>    
+                                </div></a><a href="#t10" class="toc-link"><div class="toc-entry l">
+                                    <div class="toc-title">Teil a)</div>
+                                    <div class="toc-page" data-target="t10"></div>    
+                                </div></a><a href="#t11" class="toc-link"><div class="toc-entry l">
+                                    <div class="toc-title">Teil b)</div>
+                                    <div class="toc-page" data-target="t11"></div>    
+                                </div></a><a href="#t12" class="toc-link"><div class="toc-entry l">
+                                    <div class="toc-title">Teil c)</div>
+                                    <div class="toc-page" data-target="t12"></div>    
+                                </div></a></div>
+<div class="spacer" style="height: 50px; width: 50px"></div>
+<p class="xl" id="t6">
+Aufgabe 1
+</p>
+<p class="l" id="t7">
+Teil a)
+</p>
+<pre><code class=" language-c" lang="c" src="sketch_a.c">#include <Wire.h>
+
+void setup() {
+    Wire.begin(42);
+}
+
+void reqFrom(int id, String request) {
+    Wire.begin(id);
+    Wire.write(request);
+    Wire.end();
+}
+
+void loop() {
+    reqFrom(3, "Hallo")
+}
+</code></pre>
+<div class="page-break"></div>
+<p class="l" id="t8">
+Teil b)
+</p>
+<img src="schaltplan.png">
+<div class="page-break"></div>
+<p class="xl" id="t9">
+Aufgabe 2
+</p>
+<p class="l" id="t10">
+Teil a)
+</p>
+<img class="center uml-diagram" src="http://www.plantuml.com/plantuml/svg/~h407374617274756d6c0a5b2a5d202d2d3e2042657a61686c766f7267616e670a0a42657a61686c766f7267616e67202d2d3e20302e354575726f42657a61686c743a2045696e7775726620302e35204575726f0a302e354575726f42657a61686c74202d2d3e20314575726f42657a61686c743a2045696e7775726620302e35204575726f0a302e354575726f42657a61686c74202d2d3e20417573676162653a2045696e777572662031204575726f0a302e354575726f42657a61686c74202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662032204575726f0a0a42657a61686c766f7267616e67202d2d3e20314575726f42657a61686c743a2045696e777572662031204575726f0a314575726f42657a61686c74202d2d3e20417573676162653a2045696e7775726620302e35204575726f0a314575726f42657a61686c74202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662031204575726f0a314575726f42657a61686c74202d2d3e205765636873656c67656c64314575726f3a2045696e777572662032204575726f0a0a42657a61686c766f7267616e67202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662032204575726f0a0a5765636873656c67656c64302e354575726f202d2d3e20417573676162650a5765636873656c67656c64314575726f202d2d3e20417573676162650a0a40656e64756d6c" src="">
+<div class="page-break"></div>
+<p class="l" id="t11">
+Teil b)
+</p>
+<img class="center uml-diagram" src="http://www.plantuml.com/plantuml/svg/~h4073746172747762730a2b20496e697469616c6973696572656e0a2b2b204b69636b206f66660a2b2b20496e736572740a2b2b2b2052656d6f76650a2b2b2b204c6f67696e0a2b2b2b2b204c6f67696e204661696c0a2b2b2b2b2052656d6f76650a2b2b2b2b204c6f67696e204f4b0a2b2b2b2b2b2052656d6f76650a2b2b2b2b2b2053442041757468204f4b0a2b2b2b2b2b2b2052656d6f76650a2b2b2b2b2b2b204c6f676f75740a40656e64776273" src="">
+<p class="l" id="t12">
+Teil c)
+</p>
+<div class="horizontal layout">
+<div class="spacer" style="height: 1px; width: 1px"></div>
+<ul >
+<li >
+a,b,c,d,e
+</li>
+<li >
+a,b,c,document
+</li>
+<li >
+a,d,e,f
+</li>
+<li >
+a,f,d,e
+</li>
+</ul>
 </div>
 <div class=" footer-content">
 Built with <a href="https://github.com/davidtraum/ultradoc">UltraDoc</a>
