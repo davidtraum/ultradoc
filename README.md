@@ -17,6 +17,7 @@ Required software: git, deno, npm
 * Layouts
 * Code Highlighting (using highlight.js)
 * UML Diagrams (using PlantUML)
+* Easy font loading (using Google Fonts)
 
 ## Examples
 
