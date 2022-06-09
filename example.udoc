@@ -1,12 +1,28 @@
 @document title Demo
 @font require Montserrat
+@page size A4 
 
-#t {xxl} [no-toc] Hallo
+#t {xxl} [no-toc] Probleklausur
+#t David Traum ITM2
 
-#newpage
+#space
 
+#t {xl} [no-toc] Inhalt
 #toc
 
 #newpage
+#t {xl} Sketch
+#code [lang=c++, src=sketch.c]
 
-#t {xl} Kapitel 1
+#newpage
+
+#t {xl} Zustandsautomat
+
+#diagram [src=diag.uml] {center}
+
+#newpage
+
+#t {xl} Zustandsbasiertes Testen
+#t {l} Aufgabe a)
+#diagram [src=tree.uml] {center}
+#t {note} Das Diagramm ist unvollständig.

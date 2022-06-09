@@ -3,6 +3,8 @@ import { DocumentNode } from "../DocumentNode.ts";
 
 export class CodeNode extends DocumentNode {
 
+    private content = '';
+
     constructor(args: NodeArguments) {
         super(args);
         if(args.attributes['lang']) {
@@ -15,7 +17,7 @@ export class CodeNode extends DocumentNode {
     }
 
     getOpenTag(): string {
-        return `<pre><code ${this.getDefaultTagAttributes()}>`;
+        return `<pre><code ${this.getDefaultTagAttributes()}>${this.content}`;
     }
 
     isVoid(): boolean {
@@ -33,8 +35,11 @@ export class CodeNode extends DocumentNode {
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/styles/default.min.css">
                 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-                <script>hljs.highlightAll(); hljs.initLineNumbersOnLoad();</script>
             `);
+        }
+        if(this.args.attributes.src) {
+            const fileContent = Deno.readTextFileSync(this.args.attributes.src);
+            this.content = fileContent;
         }
     }
 }

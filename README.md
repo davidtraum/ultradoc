@@ -1,13 +1,22 @@
 
 > Hint: Early state of development. A more detailed documentation will follow.
 
+## Installation
+
+Required software: git, deno, npm
+
+1. Clone the repository using `git clone https://github.com/davidtraum/ultradoc`
+2. Enter the directory using `cd ultradoc`
+3. Install using `npm run install`
+4. UltraDoc is now available systemwide using the `udoc` command
+
 ## Functional document markup
 * Lists
 * Tables
 * Images
 * Layouts
-* Code Highlighting
-* Math
+* Code Highlighting (using highlight.js)
+* UML Diagrams (using PlantUML)
 
 ## Examples
 

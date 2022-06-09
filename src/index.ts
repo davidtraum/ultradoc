@@ -1,6 +1,5 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import { DocumentCompiler } from "./compiler/DocumentCompiler.ts";
-import { renderPDF } from "./renderer/PDFRenderer.ts";
 
 interface CommandLineArguments {
     in?: string;
@@ -10,6 +9,7 @@ interface CommandLineArguments {
 
 const args = parse(Deno.args) as CommandLineArguments;
 
+const startTime = Date.now();
 const compiler = new DocumentCompiler();
 
 function finish() {
@@ -18,13 +18,10 @@ function finish() {
     if(args.out) {
         console.log("Writing", args.out);
         Deno.writeTextFileSync(args.out, compiler.getDocumentContent());
-        if(args.pdf) {
-            renderPDF('index.html');
-        }
     } else {
         console.log(compiler.getDocumentContent());
     }
-    console.log("Finished.");
+    console.log("Finished. Compiled in", (Date.now() - startTime), "ms");
     for(const error of compiler.errors) {
         console.log("Error:", error);
     }
@@ -38,7 +35,7 @@ if(args.in) {
     });
 } else {
     while(true) {
-        const promptIn = prompt();
+        const promptIn = prompt("");
         if(promptIn){
             compiler.inputLine(promptIn);
         } else {

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>Demo</title>
+<title>My document</title>
 <meta charset="utf-8">
 <style>
         @media print {
@@ -383,7 +383,7 @@ async function postRender() {
                 pageSize: {"width":210,"height":297,"label":"A4"},
                 pageNumbers: true,
                 excludePageNumbers: [],
-                usesCode: true
+                usesCode: false
             }
         
 </script>
@@ -392,67 +392,12 @@ async function postRender() {
                                     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                                 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/styles/default.min.css">
-                <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-            
-</head><body><p class="xxl" no-toc id="t1">
-Probleklausur
+</head><body><div class="spacer" style="height: 500px; width: 500px"></div>
+<div class="center">
+<p class="xxl" id="t1">
+My document
 </p>
-<p  id="t2">
-David Traum ITM2
-</p>
-<div class="spacer" style="height: 1px; width: 1px"></div>
-<p class="xl" no-toc id="t3">
-Inhalt
-</p>
-<div ><a href="#t4" class="toc-link"><div class="toc-entry xl">
-                                    <div class="toc-title">Sketch</div>
-                                    <div class="toc-page" data-target="t4"></div>    
-                                </div></a><a href="#t5" class="toc-link"><div class="toc-entry xl">
-                                    <div class="toc-title">Zustandsautomat</div>
-                                    <div class="toc-page" data-target="t5"></div>    
-                                </div></a><a href="#t6" class="toc-link"><div class="toc-entry xl">
-                                    <div class="toc-title">Zustandsbasiertes Testen</div>
-                                    <div class="toc-page" data-target="t6"></div>    
-                                </div></a><a href="#t7" class="toc-link"><div class="toc-entry l">
-                                    <div class="toc-title">Aufgabe a)</div>
-                                    <div class="toc-page" data-target="t7"></div>    
-                                </div></a></div>
-<div class="page-break"></div>
-<p class="xl" id="t4">
-Sketch
-</p>
-<pre><code class=" language-c++" lang="c++" src="sketch.c">#include <Wire.h>
-
-void setup() {
-    Wire.begin(42);
-}
-
-void reqFrom(int id, String request) {
-    Wire.begin(id);
-    Wire.write(request);
-    Wire.end();
-}
-
-void loop() {
-    reqFrom(3, "Hallo")
-}
-</code></pre>
-<div class="page-break"></div>
-<p class="xl" id="t5">
-Zustandsautomat
-</p>
-<img class="center uml-diagram" src="http://www.plantuml.com/plantuml/svg/~h407374617274756d6c0a5b2a5d202d2d3e2042657a61686c766f7267616e670a0a42657a61686c766f7267616e67202d2d3e20302e354575726f42657a61686c743a2045696e7775726620302e35204575726f0a302e354575726f42657a61686c74202d2d3e20314575726f42657a61686c743a2045696e7775726620302e35204575726f0a302e354575726f42657a61686c74202d2d3e20417573676162653a2045696e777572662031204575726f0a302e354575726f42657a61686c74202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662032204575726f0a0a42657a61686c766f7267616e67202d2d3e20314575726f42657a61686c743a2045696e777572662031204575726f0a314575726f42657a61686c74202d2d3e20417573676162653a2045696e7775726620302e35204575726f0a314575726f42657a61686c74202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662031204575726f0a314575726f42657a61686c74202d2d3e205765636873656c67656c64314575726f3a2045696e777572662032204575726f0a0a42657a61686c766f7267616e67202d2d3e205765636873656c67656c64302e354575726f3a2045696e777572662032204575726f0a0a5765636873656c67656c64302e354575726f202d2d3e20417573676162650a5765636873656c67656c64314575726f202d2d3e20417573676162650a0a40656e64756d6c" src="">
-<div class="page-break"></div>
-<p class="xl" id="t6">
-Zustandsbasiertes Testen
-</p>
-<p class="l" id="t7">
-Aufgabe a)
-</p>
-<img class="center uml-diagram" src="http://www.plantuml.com/plantuml/svg/~h407374617274756d6c0a5b2a5d202d2d3e20496e697469616c697a696e670a496e697469616c697a696e67202d2d3e204e6f745f436f6e6e65637465640a4e6f745f436f6e6e6563746564202d2d3e20436f6e6e65637465640a436f6e6e6563746564202d2d3e204e6f745f436f6e6e65637465640a436f6e6e6563746564202d2d3e2041757468656e74696669636174696e675f557365720a40656e64756d6c" src="">
-<p class="note" id="t8">
-Das Diagramm ist unvollständig.
-</p></body></html>
+</div>
+<div class=" footer-content">
+Built with <a href="https://github.com/davidtraum/ultradoc">UltraDoc</a>
+</div></body></html>

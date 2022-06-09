@@ -1,0 +1,8 @@
+@document title My document
+@font require Montserrat
+
+#space [size=500]
+#container {center}
+  #t {xxl} My document
+
+#footer %%branding

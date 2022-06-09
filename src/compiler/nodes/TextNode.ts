@@ -9,7 +9,7 @@ export class TextNode extends DocumentNode {
     constructor(args: NodeArguments) {
         super(args);
         if(this.args.content) {
-            this.id = this.args.content + (++TextNode.idCount);
+            this.id = 't' + (++TextNode.idCount);
         }
     }
 

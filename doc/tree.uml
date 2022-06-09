@@ -1,0 +1,7 @@
+@startuml
+[*] --> Initializing
+Initializing --> Not_Connected
+Not_Connected --> Connected
+Connected --> Not_Connected
+Connected --> Authentificating_User
+@enduml

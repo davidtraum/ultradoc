@@ -1,0 +1,19 @@
+@startuml
+[*] --> Bezahlvorgang
+
+Bezahlvorgang --> 0.5EuroBezahlt: Einwurf 0.5 Euro
+0.5EuroBezahlt --> 1EuroBezahlt: Einwurf 0.5 Euro
+0.5EuroBezahlt --> Ausgabe: Einwurf 1 Euro
+0.5EuroBezahlt --> Wechselgeld0.5Euro: Einwurf 2 Euro
+
+Bezahlvorgang --> 1EuroBezahlt: Einwurf 1 Euro
+1EuroBezahlt --> Ausgabe: Einwurf 0.5 Euro
+1EuroBezahlt --> Wechselgeld0.5Euro: Einwurf 1 Euro
+1EuroBezahlt --> Wechselgeld1Euro: Einwurf 2 Euro
+
+Bezahlvorgang --> Wechselgeld0.5Euro: Einwurf 2 Euro
+
+Wechselgeld0.5Euro --> Ausgabe
+Wechselgeld1Euro --> Ausgabe
+
+@enduml

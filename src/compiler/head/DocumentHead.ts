@@ -60,7 +60,8 @@ export class DocumentHead {
             window.udoc = {
                 pageSize: ${JSON.stringify(this.properties.pageSize)},
                 pageNumbers: ${this.properties.pageNumbers},
-                excludePageNumbers: ${JSON.stringify(this.properties.excludePageNumbers)}
+                excludePageNumbers: ${JSON.stringify(this.properties.excludePageNumbers)},
+                usesCode: ${this.properties.usesCode}
             }
         `);
         this.content.push('</script>');

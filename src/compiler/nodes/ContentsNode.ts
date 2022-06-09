@@ -16,7 +16,7 @@ export class ContentsNode extends DocumentNode {
     }
 
     getOpenTag(): string {
-        return `<div ${this.getDefaultTagAttributes()}>${this.toc}`;
+        return `<div ${this.getDefaultTagAttributes()}>${this.toc}</div>`;
     }
 
     isVoid(): boolean {
@@ -24,7 +24,7 @@ export class ContentsNode extends DocumentNode {
     }
 
     getCloseTag(): string {
-        return `</img>`;
+        return `</div>`;
     }
 
     postProcess(compiler: DocumentCompiler) {

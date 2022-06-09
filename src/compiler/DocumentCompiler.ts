@@ -22,6 +22,8 @@ import { TableNode } from "./nodes/TableNode.ts";
 import { TableRowNode } from "./nodes/TableRowNode.ts";
 import { TextNode } from "./nodes/TextNode.ts";
 import { TransformNode } from "./nodes/TransformNode.ts";
+import { UMLNode } from "./nodes/UMLNode.ts";
+import Placeholders from "./placeholder/Placeholders.ts";
 
 export interface NodeArguments {
     type: string;
@@ -56,7 +58,8 @@ export class DocumentCompiler {
         BorderNode,
         LayoutNode,
         ErrorsNode,
-        FooterNode
+        FooterNode,
+        UMLNode
     ]
     public readonly errors: Array<string> = [];
     private lineCount = 0;
@@ -69,6 +72,7 @@ export class DocumentCompiler {
     private readonly components: {[key: string]: string[]} = {};
     private iconService = 'ionic';
     private currentReadComponent?: string;
+    private ignore = false;
     public stats = {
         nodesProcessed: 0
     };
@@ -155,7 +159,7 @@ export class DocumentCompiler {
         }
         content = content.trim();
         switch(args[0]) {
-            case "import":
+            case "include":
                 const text = Deno.readTextFileSync(content);
                 let skip = 0;
                 let end = -1;
@@ -235,6 +239,16 @@ export class DocumentCompiler {
                         break;
                 }
                 break;
+            case "ignore":
+                switch(args[1]) {
+                    case "begin":
+                        this.ignore = true;
+                        break;
+                    case "end":
+                        this.ignore = false;
+                        break;
+                }
+                break;
             case "icon":
                 switch(args[1]) {
                     case "service":
@@ -281,6 +295,7 @@ export class DocumentCompiler {
 
     inputLine(line: string) {
         this.lineCount++;
+        if(this.ignore) return;
         let trimmed = line.trim();
         if(trimmed.length > 0) {
             if(trimmed[0] !== '@' && this.currentReadComponent) {
@@ -352,10 +367,12 @@ export class DocumentCompiler {
     }
 
     fillPlaceholders(text: string): string {
-        while(text.includes('%%time')) text = text.replace('%%time', new Date().toLocaleTimeString());
-        while(text.includes('%%date')) text = text.replace('%%date', new Date().toLocaleDateString());
-        while(text.includes('%%os')) text = text.replace('%%os', Deno.build.os);
-        while(text.includes('%%title')) text = text.replace('%%title', this.head.properties.title);
+        for(const placeholder of Object.keys(Placeholders)) {
+            while(text.includes(`%%${placeholder}`)) {
+                //@ts-ignore
+                text = text.replace(`%%${placeholder}`, Placeholders[placeholder](this));
+            }
+        }
         return text;
     }
 

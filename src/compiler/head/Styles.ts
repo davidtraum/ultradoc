@@ -60,6 +60,12 @@ const Styles = {
             margin-top: .5em;
             margin-bottom: .5em;
         }
+        .note {
+            border-left: 1rem solid lightblue;
+            background-color: rgb(240,240,240);
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
         p.xs {
             font-size: 0.5rem;
         }
@@ -216,6 +222,9 @@ const Styles = {
             margin: 0;
             padding: 0;
             padding-left: 1rem;
+        }
+        img {
+            max-width: 100%;
         }
     `
 }
